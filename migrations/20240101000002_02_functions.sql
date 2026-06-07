@@ -7,10 +7,7 @@ DROP FUNCTION IF EXISTS search_boxes CASCADE;
 -- ============================================
 -- Supports full text search, precise filtering and composite queries
 -- Related metadata_boxes table to get metadata information
--- Must specify network parameter to distinguish data from different networks
 CREATE OR REPLACE FUNCTION search_boxes(
-  network_filter TEXT DEFAULT NULL,
-  layer_filter TEXT DEFAULT 'sapphire',
   search_query TEXT DEFAULT NULL,
   status_filter SMALLINT[] DEFAULT NULL,  -- Changed from TEXT[] to SMALLINT[]
   type_of_crime_filter TEXT[] DEFAULT NULL,
@@ -48,17 +45,6 @@ RETURNS TABLE (
   relevance REAL
 ) AS $$
 BEGIN
-  -- Parameter validation
-  IF network_filter IS NULL THEN
-    RAISE EXCEPTION 'network_filter cannot be NULL';
-  END IF;
-  IF network_filter NOT IN ('testnet', 'mainnet') THEN
-    RAISE EXCEPTION 'network_filter must be ''testnet'' or ''mainnet''';
-  END IF;
-  IF layer_filter IS NOT NULL AND layer_filter != 'sapphire' THEN
-    RAISE EXCEPTION 'layer_filter must be ''sapphire''';
-  END IF;
-
   -- Safety cap: max 200 records
   limit_count := LEAST(limit_count, 200);
   
@@ -116,11 +102,9 @@ BEGIN
       ELSE 0::REAL
     END AS relevance
   FROM boxes b
-  LEFT JOIN metadata_boxes mb ON mb.network = b.network AND mb.layer = b.layer AND mb.id = b.id
+  LEFT JOIN metadata_boxes mb ON mb.id = b.id
   WHERE 
-    b.network = network_filter
-    AND b.layer = layer_filter
-    AND (
+    (
       -- If there is no search query, return all results
       search_query IS NULL OR
       search_query = '' OR

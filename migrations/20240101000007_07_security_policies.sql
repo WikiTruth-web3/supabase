@@ -42,9 +42,9 @@ CREATE POLICY "Public read access for user_addresses" ON user_addresses FOR SELE
 CREATE POLICY "Public read access for payments" ON payments FOR SELECT USING (true);
 
 -- ============================================
--- 6. withdraws
+-- 6. order_refund_withdraws
 -- ============================================
-CREATE POLICY "Public read access for withdraws" ON withdraws FOR SELECT USING (true);
+CREATE POLICY "Public read access for order_refund_withdraws" ON order_refund_withdraws FOR SELECT USING (true);
 
 -- ============================================
 -- 7. rewards_addeds
@@ -62,9 +62,9 @@ CREATE POLICY "Public read access for box_rewards" ON box_rewards FOR SELECT USI
 CREATE POLICY "Public read access for user_rewards" ON user_rewards FOR SELECT USING (true);
 
 -- ============================================
--- 10. user_withdraws
+-- 10. rewards_withdraws
 -- ============================================
-CREATE POLICY "Public read access for user_withdraws" ON user_withdraws FOR SELECT USING (true);
+CREATE POLICY "Public read access for rewards_withdraws" ON rewards_withdraws FOR SELECT USING (true);
 
 -- ============================================
 -- 11. box_bidders
@@ -77,9 +77,9 @@ CREATE POLICY "Public read access for box_bidders" ON box_bidders FOR SELECT USI
 CREATE POLICY "Public read access for box_user_order_amounts" ON box_user_order_amounts FOR SELECT USING (true);
 
 -- ============================================
--- 13. statistical_state
+-- 13. box_status_statistical
 -- ============================================
-CREATE POLICY "Public read access for statistical_state" ON statistical_state FOR SELECT USING (true);
+CREATE POLICY "Public read access for box_status_statistical" ON box_status_statistical FOR SELECT USING (true);
 
 -- ============================================
 -- 14. fund_manager_state
