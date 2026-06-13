@@ -5,7 +5,7 @@
 CREATE INDEX IF NOT EXISTS idx_boxes_token_id ON boxes(token_id);
 CREATE INDEX IF NOT EXISTS idx_boxes_status ON boxes(status);
 CREATE INDEX IF NOT EXISTS idx_boxes_minter_id ON boxes(minter_id);
-CREATE INDEX IF NOT EXISTS idx_boxes_owner_address ON boxes(owner_address);
+-- CREATE INDEX IF NOT EXISTS idx_boxes_owner_address ON boxes(owner_address);
 CREATE INDEX IF NOT EXISTS idx_boxes_publisher_id ON boxes(publisher_id);
 CREATE INDEX IF NOT EXISTS idx_boxes_seller_id ON boxes(seller_id);
 CREATE INDEX IF NOT EXISTS idx_boxes_buyer_id ON boxes(buyer_id);

@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS payments (
   token TEXT NOT NULL, 
   amount NUMERIC(78, 0) NOT NULL, 
   timestamp NUMERIC(78, 0) NOT NULL,
-  transaction_hash BYTEA NOT NULL, 
+  transaction_hash BYTEA NOT NULL
   -- block_number NUMERIC(78, 0) NOT NULL
 );
 
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS order_refund_withdraws (
   withdraw_type TEXT NOT NULL CHECK (withdraw_type IN ('Order', 'Refund')),
   amount NUMERIC(78, 0) NOT NULL,
   timestamp NUMERIC(78, 0) NOT NULL,
-  transaction_hash BYTEA NOT NULL,
+  transaction_hash BYTEA NOT NULL
   -- block_number NUMERIC(78, 0) NOT NULL
 );
 
