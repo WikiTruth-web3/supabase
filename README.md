@@ -1,6 +1,6 @@
-# WikiTruth Supabase Database
+# Evidence Market Supabase Database
 
-This document explains how to set up and use the Supabase database for the WikiTruth project.
+This document explains how to set up and use the Supabase database for the Evidence Market project.
 
 ## Quick Start
 

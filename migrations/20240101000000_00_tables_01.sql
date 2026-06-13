@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS boxes (
   completer_id TEXT, -- UserId (bytes32 hex)
   
   -- Status and timestamps
-  -- Status values: 0=Storing, 1=Selling, 2=Auctioning, 3=Paid, 4=Refunding, 5=Delaying, 6=Published, 7=Blacklisted
+  -- Status values: 0=Storing, 1=Selling, 2=Auctioning, 3=Paid, 4=Delaying, 5=Refunding, 6=Published, 7=Blacklisted
   status SMALLINT NOT NULL CHECK (status BETWEEN 0 AND 7),
   
   -- Transaction related
@@ -106,6 +106,8 @@ CREATE TABLE IF NOT EXISTS metadata_boxes (
   title TEXT, 
   nft_image TEXT, 
   box_image TEXT, 
+  nft_image_r2 TEXT,  -- cloudflare r2
+  box_image_r2 TEXT,  -- cloudflare r2
   country TEXT, 
   state TEXT, 
   description TEXT, 

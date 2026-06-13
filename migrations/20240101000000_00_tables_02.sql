@@ -120,8 +120,7 @@ CREATE TABLE IF NOT EXISTS rewards_withdraws (
   token TEXT NOT NULL, 
   PRIMARY KEY (id),
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-  amount NUMERIC(78, 0) NOT NULL DEFAULT 0,
-  UNIQUE(user_id, "rewards_withdraws", token)
+  amount NUMERIC(78, 0) NOT NULL DEFAULT 0
 );
 
 ALTER TABLE rewards_withdraws ENABLE ROW LEVEL SECURITY;
@@ -139,7 +138,7 @@ CREATE TABLE IF NOT EXISTS user_rewards (
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
   currentAmount NUMERIC(78, 0) NOT NULL DEFAULT 0,
   totalAmount NUMERIC(78, 0) NOT NULL DEFAULT 0,
-  UNIQUE(user_id, "user_rewards",token)
+  UNIQUE(user_id, token)
 );
 
 ALTER TABLE user_rewards ENABLE ROW LEVEL SECURITY;

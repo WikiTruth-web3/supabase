@@ -1,5 +1,5 @@
-
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import * as DBTypes from './dataBase';
 
 const supabaseConfig = {
     url: process.env.SUPABASE_URL || '',
@@ -11,7 +11,6 @@ if (!supabaseConfig.url || !supabaseConfig.anonKey) {
     throw new Error('Missing Supabase configuration, please check environment variables SUPABASE_URL and SUPABASE_ANON_KEY');
 }
 
-
 export function createSupabaseClient(): SupabaseClient<Database> {
     return createClient<Database>(supabaseConfig.url, supabaseConfig.anonKey, {
         auth: {
@@ -20,7 +19,6 @@ export function createSupabaseClient(): SupabaseClient<Database> {
         },
     });
 }
-
 
 export function createSupabaseServiceClient(): SupabaseClient<Database> {
     if (!supabaseConfig.serviceRoleKey) {
@@ -37,452 +35,98 @@ export function createSupabaseServiceClient(): SupabaseClient<Database> {
 
 export const supabase = createSupabaseClient();
 
-
 export interface Database {
     public: {
         Tables: {
             boxes: {
-                Row: {
-                    network: 'testnet' | 'mainnet';
-                    layer: 'sapphire';
-                    id: string;
-                    token_id: string;
-                    token_uri: string | null;
-                    box_info_cid: string | null;
-                    private_key: string | null;
-                    price: string;
-                    deadline: string;
-                    minter_id: string;
-                    owner_address: string;
-                    publisher_id: string | null;
-                    seller_id: string | null;
-                    buyer_id: string | null;
-                    completer_id: string | null;
-                    status: number;
-                    listed_mode: number | null;
-                    accepted_token: string | null;
-                    refund_permit: boolean | null;
-                    create_timestamp: string;
-                    publish_timestamp: string | null;
-                    listed_timestamp: string | null;
-                    purchase_timestamp: string | null;
-                    complete_timestamp: string | null;
-                    request_refund_deadline: string | null;
-                    review_deadline: string | null;
-                };
-                Insert: {
-                    network: 'testnet' | 'mainnet';
-                    layer?: 'sapphire';
-                    id: string;
-                    token_id: string;
-                    token_uri?: string | null;
-                    box_info_cid: string | null;
-                    private_key?: string | null;
-                    price?: string;
-                    deadline?: string;
-                    minter_id: string;
-                    owner_address: string;
-                    publisher_id?: string | null;
-                    seller_id?: string | null;
-                    buyer_id?: string | null;
-                    completer_id?: string | null;
-                    status: number;
-                    listed_mode?: number | null;
-                    accepted_token?: string | null;
-                    refund_permit?: boolean | null;
-                    create_timestamp: string;
-                    publish_timestamp?: string | null;
-                    listed_timestamp?: string | null;
-                    purchase_timestamp?: string | null;
-                    complete_timestamp?: string | null;
-                    request_refund_deadline?: string | null;
-                    review_deadline?: string | null;
-                };
-                Update: {
-                    network?: 'testnet' | 'mainnet';
-                    layer?: 'sapphire';
-                    id?: string;
-                    token_id?: string;
-                    token_uri?: string | null;
-                    box_info_cid?: string | null;
-                    private_key?: string | null;
-                    price?: string;
-                    deadline?: string;
-                    minter_id?: string;
-                    owner_address?: string;
-                    publisher_id?: string | null;
-                    seller_id?: string | null;
-                    buyer_id?: string | null;
-                    completer_id?: string | null;
-                    status?: number;
-                    listed_mode?: number | null;
-                    accepted_token?: string | null;
-                    refund_permit?: boolean | null;
-                    create_timestamp?: string;
-                    publish_timestamp?: string | null;
-                    listed_timestamp?: string | null;
-                    purchase_timestamp?: string | null;
-                    complete_timestamp?: string | null;
-                    request_refund_deadline?: string | null;
-                    review_deadline?: string | null;
-                };
+                Row: DBTypes.Box;
+                Insert: Partial<DBTypes.Box> & Pick<DBTypes.Box, 'id' | 'minter_id' | 'status' | 'create_timestamp' | 'token_id'>;
+                Update: Partial<DBTypes.Box>;
             };
             metadata_boxes: {
-                Row: {
-                    network: 'testnet' | 'mainnet';
-                    layer: 'sapphire';
-                    id: string;
-                    type_of_crime: string | null;
-                    label: string[] | null;
-                    title: string | null;
-                    nft_image: string | null;
-                    box_image: string | null;
-                    country: string | null;
-                    state: string | null;
-                    description: string | null;
-                    event_date: string | null;
-                    create_date: string | null;
-                    timestamp: number | null;
-                    mint_method: string | null;
-                    file_list: string[] | null;
-                    password: string | null;
-                    encryption_slices_metadata_cid: Record<string, unknown> | null;
-                    encryption_file_cid: Record<string, unknown>[] | null;
-                    encryption_passwords: Record<string, unknown> | null;
-                    public_key: string | null;
-                };
-                Insert: {
-                    network: 'testnet' | 'mainnet';
-                    layer?: 'sapphire';
-                    id: string; // boxId (BIGINT)
-                    type_of_crime: string | null;
-                    label: string[] | null;
-                    title: string | null;
-                    nft_image: string | null;
-                    box_image: string | null;
-                    country: string | null;
-                    state: string | null;
-                    description: string | null;
-                    event_date: string | null;
-                    create_date: string | null;
-                    timestamp: number | null;
-                    mint_method: string | null;
-                    file_list: string[] | null;
-                    password?: string | null;
-                    encryption_slices_metadata_cid?: Record<string, unknown> | null;
-                    encryption_file_cid?: Record<string, unknown>[] | null;
-                    encryption_passwords?: Record<string, unknown> | null;
-                    public_key?: string | null;
-                };
-                Update: never; // Do not allow subsequent updates
+                Row: DBTypes.MetadataBox;
+                Insert: Partial<DBTypes.MetadataBox> & Pick<DBTypes.MetadataBox, 'id'>;
+                Update: never; // Cannot update metadata once created
             };
             users: {
-                Row: {
-                    network: 'testnet' | 'mainnet';
-                    layer: 'sapphire';
-                    id: string;
-                };
-                Insert: {
-                    network: 'testnet' | 'mainnet';
-                    layer?: 'sapphire';
-                    id: string;
-                }; 
-                Update: never; // Do not allow subsequent updates
+                Row: DBTypes.User;
+                Insert: DBTypes.User;
+                Update: never;
             };
             user_addresses: {
-                Row: {
-                    network: 'testnet' | 'mainnet';
-                    layer: 'sapphire';
-                    id: string;
-                    is_blacklisted: boolean;
-                };
-                Insert: {
-                    network: 'testnet' | 'mainnet';
-                    layer?: 'sapphire';
-                    id: string;
-                    is_blacklisted?: boolean;
-                };
-                // ⚠️ Allow updates: Blacklist event will update is_blacklisted field
-                Update: {
-                    network?: 'testnet' | 'mainnet';
-                    layer?: 'sapphire';
-                    id?: string;
-                    is_blacklisted?: boolean;
-                };
+                Row: DBTypes.UserAddress;
+                Insert: DBTypes.UserAddress;
+                Update: Partial<DBTypes.UserAddress>;
             };
             box_bidders: {
-                Row: {
-                    network: 'testnet' | 'mainnet';
-                    layer: 'sapphire';
-                    id: string; // boxId (part of the primary key, corresponding to boxes.id)
-                    box_id: string;
-                    bidder_id: string;
-                };
-                Insert: {
-                    network: 'testnet' | 'mainnet';
-                    layer?: 'sapphire';
-                    id: string; // boxId-UserId
-                    box_id: string;
-                    bidder_id: string;
-                };
-                Update: never; // Do not allow subsequent updates
+                Row: DBTypes.BoxBidder;
+                Insert: DBTypes.BoxBidder;
+                Update: never;
             };
             payments: {
-                Row: {
-                    network: 'testnet' | 'mainnet';
-                    layer: 'sapphire';
-                    id: string;
-                    box_id: string;
-                    user_id: string;
-                    token: string;
-                    amount: string;
-                    timestamp: string;
-                    transaction_hash: Uint8Array;
-                    block_number: string;
-                };
-                Insert: {
-                    network: 'testnet' | 'mainnet';
-                    layer?: 'sapphire';
-                    id: string;
-                    box_id: string;
-                    user_id: string;
-                    token: string;
-                    amount: string;
-                    timestamp: string;
-                    transaction_hash: Uint8Array;
-                    block_number: string;
-                };
-                Update: never; // Do not allow subsequent updates
+                Row: DBTypes.Payment;
+                Insert: DBTypes.Payment;
+                Update: never;
             };
-            withdraws: {
-                Row: {
-                    network: 'testnet' | 'mainnet';
-                    layer: 'sapphire';
-                    id: string;
-                    token: string;
-                    box_list: string[];
-                    user_id: string;
-                    amount: string;
-                    timestamp: string;
-                    withdraw_type: 'Order' | 'Refund' | 'Reward';
-                    transaction_hash: Uint8Array;
-                    block_number: string;
-                };
-                Insert: {
-                    network: 'testnet' | 'mainnet';
-                    layer?: 'sapphire';
-                    id: string;
-                    token: string;
-                    box_list: string[];
-                    user_id: string;
-                    amount: string;
-                    timestamp: string;
-                    withdraw_type: 'Order' | 'Refund' | 'Reward';
-                    transaction_hash: Uint8Array;
-                    block_number: string;
-                };
-                Update: never; // Do not allow subsequent updates
+            order_refund_withdraws: {
+                Row: DBTypes.OrderRefundWithdraw;
+                Insert: DBTypes.OrderRefundWithdraw;
+                Update: never;
             };
             rewards_addeds: {
-                Row: {
-                    network: 'testnet' | 'mainnet';
-                    layer: 'sapphire';
-                    id: string;
-                    box_id: string;
-                    token: string;
-                    amount: string;
-                    reward_type: 'Minter' | 'Seller' | 'Completer' | 'Total';
-                    timestamp: string;
-                    transaction_hash: Uint8Array;
-                    block_number: string;
-                };
-                Insert: {
-                    network: 'testnet' | 'mainnet';
-                    layer?: 'sapphire';
-                    id: string;
-                    box_id: string;
-                    token: string;
-                    amount: string;
-                    reward_type: 'Minter' | 'Seller' | 'Completer' | 'Total';
-                    timestamp: string;
-                    transaction_hash: Uint8Array;
-                    block_number: string;
-                };
-                Update: never; // Do not allow subsequent updates
+                Row: DBTypes.RewardsAdded;
+                Insert: DBTypes.RewardsAdded;
+                Update: never;
             };
             box_rewards: {
-                Row: {
-                    network: 'testnet' | 'mainnet';
-                    layer: 'sapphire';
-                    id: string;
-                    box_id: string;
-                    reward_type: 'Minter' | 'Seller' | 'Completer' | 'Total';
-                    token: string;
-                    amount: string;
-                };
-                // ⚠️ Do not allow manual insertion: This table is managed by triggers
-                // If you need to add rewards, you should insert into rewards_addeds table
-                Insert: never;
+                Row: DBTypes.BoxReward;
+                Insert: never; // Managed by database trigger
                 Update: never;
             };
             user_rewards: {
-                Row: {
-                    network: 'testnet' | 'mainnet';
-                    layer: 'sapphire';
-                    id: string;
-                    user_id: string;
-                    reward_type: 'Minter' | 'Seller' | 'Completer';
-                    token: string;
-                    amount: string;
-                };
-                // ⚠️ Do not allow manual insertion: This table is managed by triggers
-                // user_rewards does not include Total type, only records rewards assigned to specific roles
-                Insert: never;
+                Row: DBTypes.UserReward;
+                Insert: never; // Managed by database trigger
                 Update: never;
             };
-            user_withdraws: {
-                Row: {
-                    network: 'testnet' | 'mainnet';
-                    layer: 'sapphire';
-                    id: string;
-                    user_id: string;
-                    withdraw_type: 'Reward';
-                    token: string;
-                    amount: string;
-                };
-                // ⚠️ Do not allow manual insertion: This table is managed by triggers
-                Insert: never;
+            rewards_withdraws: {
+                Row: DBTypes.RewardsWithdraw;
+                Insert: never; // Managed by database trigger
                 Update: never;
             };
-            
             box_user_order_amounts: {
-                Row: {
-                    network: 'testnet' | 'mainnet';
-                    layer: 'sapphire';
-                    id: string;
-                    user_id: string;
-                    box_id: string;
-                    token: string;
-                    amount: string;
-                };
-                // ⚠️ Do not allow manual insertion: This table is managed by triggers
-                // Financial changes should be triggered by payments, withdraws and rewards_addeds tables
-                Insert: never;
+                Row: DBTypes.BoxUserOrderAmount;
+                Insert: never; // Managed by database trigger
                 Update: never;
             };
-            statistical_state: {
-                Row: {
-                    network: 'testnet' | 'mainnet';
-                    layer: 'sapphire';
-                    id: string;
-                    total_supply: string;
-                    status_0_supply: string;
-                    status_1_supply: string;
-                    status_2_supply: string;
-                    status_3_supply: string;
-                    status_4_supply: string;
-                    status_5_supply: string;
-                    status_6_supply: string;
-                    status_7_supply: string;
-                };
-                // ⚠️ Do not allow manual insertion: This table is managed by triggers
-                // Statistical data changes should be triggered by inserting into boxes table and updating status
-                Insert: never;
-                //  TODO  In tests, do not use this update, it will be removed in production
-                Update: {
-                    total_supply?: string;
-                    status_0_supply?: string;
-                    status_1_supply?: string;
-                    status_2_supply?: string;
-                    status_3_supply?: string;
-                    status_4_supply?: string;
-                    status_5_supply?: string;
-                    status_6_supply?: string;
-                    status_7_supply?: string;
-                    network?: 'testnet' | 'mainnet';
-                    layer?: 'sapphire';
-                    id?: string;
-                };
+            box_status_statistical: {
+                Row: DBTypes.BoxStatusStatistical;
+                Insert: never; // Managed by database trigger
+                Update: never;
             };
             fund_manager_state: {
-                Row: {
-                    network: 'testnet' | 'mainnet';
-                    layer: 'sapphire';
-                    id: string;
-                    paused: boolean;
-                };
-                Insert: {
-                    network: 'testnet' | 'mainnet';
-                    layer?: 'sapphire';
-                    id?: string;
-                    paused?: boolean;
-                };
-                Update: {
-                    paused?: boolean;
-                };
+                Row: DBTypes.FundManagerState;
+                Insert: Partial<DBTypes.FundManagerState>;
+                Update: Partial<DBTypes.FundManagerState>;
             };
             forwarder_state: {
-                Row: {
-                    network: 'testnet' | 'mainnet';
-                    layer: 'sapphire';
-                    id: string;
-                    paused: boolean;
-                };
-                Insert: {
-                    network: 'testnet' | 'mainnet';
-                    layer?: 'sapphire';
-                    id?: string;
-                    paused?: boolean;
-                };
-                Update: {
-                    paused?: boolean;
-                };
+                Row: DBTypes.ForwarderState;
+                Insert: Partial<DBTypes.ForwarderState>;
+                Update: Partial<DBTypes.ForwarderState>;
             };
             token_total_amounts: {
-                Row: {
-                    network: 'testnet' | 'mainnet';
-                    layer: 'sapphire';
-                    id: string;
-                    token: string;
-                    fund_manager_id: string;
-                    funds_type: 'OrderPaid' | 'OrderWithdraw' | 'RefundWithdraw' | 'RewardsAdded' | 'RewardsWithdraw';
-                    amount: string;
-                };
-                // ⚠️ Do not allow manual insertion: This table is managed by triggers
-                // Total amount changes should be triggered by business tables (payments, withdraws, box_rewards)
-                Insert: never;
+                Row: DBTypes.TokenTotalAmount;
+                Insert: never; // Managed by database trigger
                 Update: never;
             };
             sync_status: {
-                Row: {
-                    network: 'testnet' | 'mainnet';
-                    layer: 'sapphire';
-                    contract_name: string;
-                    last_synced_block: string;
-                    last_synced_at: string;
-                };
-                Insert: {
-                    network: 'testnet' | 'mainnet';
-                    layer?: 'sapphire';
-                    contract_name: string;
-                    last_synced_block?: string;
-                    last_synced_at?: string;
-                };
-                // ⚠️ Allow updates: Event sync script needs to update sync status
-                Update: {
-                    network?: 'testnet' | 'mainnet';
-                    layer?: 'sapphire';
-                    contract_name?: string;
-                    last_synced_block?: string;
-                    last_synced_at?: string;
-                };
+                Row: DBTypes.SyncStatus;
+                Insert: Partial<DBTypes.SyncStatus> & Pick<DBTypes.SyncStatus, 'contract_name'>;
+                Update: Partial<DBTypes.SyncStatus>;
             };
         };
         Functions: {
             search_boxes: {
                 Args: {
-                    network_filter: 'testnet' | 'mainnet';
-                    layer_filter?: 'sapphire';
                     search_query?: string | null;
                     status_filter?: number[] | null;
                     type_of_crime_filter?: string[] | null;
@@ -501,7 +145,6 @@ export interface Database {
                 };
                 Returns: {
                     id: string;
-                    token_id: string;
                     title: string | null;
                     description: string | null;
                     type_of_crime: string | null;
@@ -515,6 +158,8 @@ export interface Database {
                     buyer_id: string | null;
                     nft_image: string | null;
                     box_image: string | null;
+                    nft_image_r2: string | null;
+                    box_image_r2: string | null;
                     event_date: string | null;
                     create_timestamp: string;
                     accepted_token: string | null;
@@ -524,4 +169,3 @@ export interface Database {
         };
     };
 }
-

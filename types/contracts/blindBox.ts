@@ -5,8 +5,8 @@ export const boxStatus = [
     'Selling',
     'Auctioning',
     'Paid',
-    'Refunding',
     'Delaying', // InSecrecy
+    'Refunding',
     'Published',
     'Blacklisted',
 ] as const;

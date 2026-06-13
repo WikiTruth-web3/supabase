@@ -30,7 +30,7 @@ export interface MetadataBoxType extends BoxInfoType, ProjectDataType, FileInfoT
 export const initialMetadataBox: MetadataBoxType = {
     project: projectDataStore.project,
     website: projectDataStore.website,
-    name: "Truth Box",
+    name: "Blind Box",
     token_id: "",
     type_of_crime: "",
     label: [],
